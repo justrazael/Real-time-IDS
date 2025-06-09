@@ -368,8 +368,8 @@ def flow_detail():
     risk_proba =  sum(proba_score[0][1:])
     if risk_proba >0.8: risk = "Risk: <p style=\"color:red;\">Very High</p>"
     elif risk_proba >0.6: risk = "Risk: <p style=\"color:orangered;\">High</p>"
-    if risk_proba >0.4: risk = "Risk: <p style=\"color:orange;\">Medium</p>"
-    if risk_proba >0.2: risk = "Risk: <p style=\"color:green;\">Low</p>"
+    elif risk_proba >0.4: risk = "Risk: <p style=\"color:orange;\">Medium</p>"
+    elif risk_proba >0.2: risk = "Risk: <p style=\"color:green;\">Low</p>"
     else: risk = "Risk: <p style=\"color:limegreen;\">Minimal</p>"
     exp = explainer.explain_instance(choosen_instance[0], predict_fn_rf, num_features=6, top_labels = 1)
 
