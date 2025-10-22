@@ -183,9 +183,40 @@ ae_model = keras.models.load_model('models/autoencoder_39ft.hdf5')
 with open('models/model.pkl', 'rb') as f:
     classifier = pickle.load(f)
 
-with open('models/explainer', 'rb') as f:
-    explainer = dill.load(f)
+import dill
+import numpy as np
+
+# --- PATCH for RandomState pickle compatibility ---
+def _patched_randomstate_ctor(bitgen=None, *args, **kwargs):
+    try:
+        return np.random.RandomState()
+    except Exception:
+        return np.random.mtrand.RandomState()
+
+# Apply to dill internal typemap (old RandomState pickles)
+if hasattr(dill, '_dill'):
+    dill._dill._reverse_typemap['RandomState'] = _patched_randomstate_ctor
+elif hasattr(dill, 'dill'):
+    dill.dill._reverse_typemap['RandomState'] = _patched_randomstate_ctor
+
+# Attempt to load the explainer safely
+try:
+    with open("models/explainer", "rb") as f:
+        explainer = dill.load(f)
+    print("[INFO] Explainer loaded successfully.")
+except Exception as e:
+    print(f"[Warning] Could not fully load explainer: {e}")
+    explainer = None
+
+# Load your model
+import pickle
+with open('models/model.pkl', 'rb') as f:
+    classifier = pickle.load(f)
+
+# Predict function
 predict_fn_rf = lambda x: classifier.predict_proba(x).astype(float)
+
+
 
 def classify(features):
     # preprocess
