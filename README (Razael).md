@@ -25,6 +25,7 @@
 Notes
 - I changed the code from application.py (line 186 -217) because that block cause errors to pop up when running application.py. If you can access the link, clicking the detail text on the table will give errors. It has something to do with the explainer file in the models folder. since its a .dill file, idk how to change it. 
 - In general, ask ChatGPT for any errors you may encounter, 70% of the time it will be fixed lol.
+- If it works, just copy paste "venv\Scripts\activate" then "python application.py" when you exit VScode and open it again later.
 
 
 
