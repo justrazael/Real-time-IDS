@@ -217,7 +217,6 @@ with open('models/model.pkl', 'rb') as f:
 predict_fn_rf = lambda x: classifier.predict_proba(x).astype(float)
 
 
-
 def classify(features):
     # preprocess
     global flow_count
@@ -455,6 +454,10 @@ def test_connect():
 def test_disconnect():
     print('Client disconnected')
 
+from data_loader import load_ids_logs
+
+# Load dataset before starting the server
+df = load_ids_logs("dataset/TimeBasedFeatures-Dataset-15s-VPN.csv")
 
 if __name__ == '__main__':
     socketio.run(app)
