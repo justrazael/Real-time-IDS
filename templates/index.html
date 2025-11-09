@@ -26,14 +26,47 @@
     <p>By NVH</p>
   </div>
 </div>
-    
 
+
+
+<!--------Innovation function on filter---------->
+<div class="container" id="content">
+    <canvas width = 60 height = 20 id="myChart"></canvas>
+    <div class="row">
+        <h3>Captured flow:</h3>
+        <div class="form-group">
+            <label for="prediction_filter">Filter by Prediction:</label>
+            <select id="prediction_filter" class="form-control">
+                <option value="all">All</option>
+                <option value="Benign">Benign</option>
+                <option value="Botnet">Botnet</option>
+                <option value="DDoS">DDoS</option>
+                <option value="DoS">DoS</option>
+                <option value="FTP-Patator">FTP-Patator</option>
+                <option value="Probe">Probe</option>
+                <option value="SSH-Patator">SSH-Patator</option>
+                <option value="Web Attack">Web Attack</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="severity_filter">Filter by Severity:</label>
+            <select id="severity_filter" class="form-control">
+                <option value="all">All</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
+        </div>
+        <div id="log">
+            <table width="100%" border="1" cellpadding="2" cellspacing="0" class="display compact" id="details">
+            </table>
+        </div> <!-- /#log -->
+    </div>
+</div>
 
 <div class="container" id="content">
     <canvas width = 60 height = 20 id="myChart"></canvas>
     <div class="row">
-        <p>Captured flow info here:</p>
-        <h3>Captured flow:</h3>
         <div id="log">
         <table width="100%" border="1" cellpadding="2" cellspacing="0" class="display compact" id="details">
         </table>
