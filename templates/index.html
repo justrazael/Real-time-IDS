@@ -49,7 +49,7 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="severity_filter">Filter by Severity:</label>
+            <label for="severity_filter">Filter by Risk:</label>
             <select id="severity_filter" class="form-control">
                 <option value="all">All</option>
                 <option value="High">High</option>
@@ -68,11 +68,30 @@
     <canvas width = 60 height = 20 id="myChart"></canvas>
     <div class="row">
         <div id="log">
-        <table width="100%" border="1" cellpadding="2" cellspacing="0" class="display compact" id="details">
-        </table>
+            <table width="100%" border="1" cellpadding="2" cellspacing="0" class="display compact" id="details">
+            </table>
         </div> <!-- /#log -->
     </div>
 </div>
+
+<div class="container" id="offline_analysis">
+    <h3>Offline Analysis: </h3>
+    <div class="row">
+        <div class="form-group">
+            <label for="dataset_upload">Upload Dataset (CSV):</label>
+            <input type="file" id="dataset_upload" class="form-control" accept=".csv">
+        </div>
+        <button id="analyze_button" class="btn btn-primary">Analyze</button>
+    </div>
+    <div class="row">
+        <h4>Analysis Results:</h4>
+        <div id="analysis_log">
+            <table width="100%" border="1" cellpadding="2" cellspacing="0" class="display compact" id="analysis_details">
+            </table>
+        </div>
+    </div>
+</div>
+
 <noscript>
   <div id="noscript">
       Javascript is disabled in your browser. You must have Javascript enabled to utilize the functionality of this page.
