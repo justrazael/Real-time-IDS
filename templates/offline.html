@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="static/css/thirdparty.min.css">
+    <link rel="stylesheet" type="text/css" href="static/css/main.css">
+    <link rel="stylesheet" type="text/css" href="static/css/media.css">
+    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/papaparse/5.3.0/papaparse.min.js"></script>
+    <script src="static/js/offline.js"></script>
+
+    <title>APT Detection System - Offline Analysis</title>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse navbar-static-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">
+        <span class="glyphicon glyphicon-shield"></span>
+        APT Detection System
+      </a>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#">By NVH</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container-fluid" id="content">
+
+    <div class="row" id="dashboard-header">
+        <div class="col-xs-12 col-sm-8 col-md-9">
+            <h2 style="margin-top: 0;">Offline Analysis Dashboard</h2>
+            <p>Upload a CSV flow data file to analyze it.</p>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-3 header-button-col">
+            <a href="/" class="btn btn-primary btn-lg header-button">
+                <span class="glyphicon glyphicon-list-alt"></span> Real-Time analysis Page 
+            </a>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+        
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <span class="glyphicon glyphicon-stats"></span>
+                        Source IP Activity (from CSV)
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <canvas id="myChart" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <span class="glyphicon glyphicon-open-file"></span>
+                        Offline Flow Analysis
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div id="offline_analysis">
+                        <div class="row">
+                            <div class="form-group col-md-8">
+                                <label for="dataset_upload">Upload Dataset (CSV):</label>
+                                <input type="file" id="dataset_upload" class="form-control" accept=".csv">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>&nbsp;</label> <button id="analyze_button" class="btn btn-primary btn-block">
+                                    <span class="glyphicon glyphicon-cog"></span> Analyze
+                                </button>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Analysis Results:</h4>
+                                <div id="analysis_log">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover table-condensed" id="analysis_details">
+                                            <tbody>
+                                                <tr><td class="text-center">Please upload a CSV file and click "Analyze".</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<noscript>
+  <div id="noscript" style="text-align: center; padding: 20px; background-color: #ffc; border: 1px solid #e6db55;">
+      <h4>Javascript Disabled</h4>
+      <p>You must have Javascript enabled in your browser to utilize the functionality of this page.</p>
+  </div>
+</noscript>
+
+<footer class="text-center" style="padding: 20px 0; margin-top: 30px; border-top: 1px solid #eee; color: #777;">
+    <p>APT Detection System by NVH</p>
+</footer>
+
+</body>
+</html>
