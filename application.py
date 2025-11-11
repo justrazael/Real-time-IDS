@@ -386,6 +386,10 @@ def index():
     #only by sending this page first will the client be connected to the socketio instance
     return render_template('index.html')
 
+@app.route('/offline.html')
+def offline():
+    return render_template('offline.html')
+
 @app.route('/flow-detail')
 def flow_detail():
     flow_id = request.args.get('flow_id', default = -1, type = int) #/flow-detail?flow_id=x
