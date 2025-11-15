@@ -2,6 +2,42 @@ body {
     background-color: #fcfcfc;
 }
 
+/* Table overall style */
+#details {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+/* Header cells */
+#details th {
+    background-color: #f5f5f5; /* light gray header */
+    color: #333;
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
+/* Data cells */
+#details td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
+/* Alternating row colors (overrides Bootstrap's stripe for a smoother look) */
+#details tbody tr:nth-child(odd) {
+    background-color: #fafafa;
+}
+#details tbody tr:nth-child(even) {
+    background-color: #fff;
+}
+
+/* Hover effect for rows */
+#details tbody tr:hover {
+    background-color: #e6f7ff;
+    transition: background-color 0.3s ease;
+}
+
 /* Fix for <p> tags dynamically inserted into table cells */
 #details td p {
     margin: 0;
