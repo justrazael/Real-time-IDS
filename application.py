@@ -376,11 +376,10 @@ def snif_and_detect():
 
     while not thread_stop_event.isSet():
         print("Begin Sniffing".center(20, ' '))
-        # sniff(iface="en0", prn=newPacket)
-        sniff(prn=newPacket)
-        for f in current_flows.values():
-            
-            classify(f.terminated())
+        # sniff for 1 second at a time, checking thread_stop_event in between
+        sniff(prn=newPacket, timeout=1)
+        
+    print("Sniffing stopped.")
 
 
 @app.route('/')
@@ -451,10 +450,24 @@ def test_connect():
     global thread
     print('Client connected')
 
-    #Start the random result generator thread only if the thread has not been started before.
+    # The sniffing thread is no longer started automatically on connect.
+    # It will be started by a 'start_sniffing' event from the client.
+
+@socketio.on('start_sniffing', namespace='/test')
+def start_sniffing():
+    """Starts the background sniffing thread."""
+    global thread
     if not thread.is_alive():
+        thread_stop_event.clear()
         print("Starting Thread")
         thread = socketio.start_background_task(snif_and_detect)
+
+@socketio.on('stop_sniffing', namespace='/test')
+def stop_sniffing():
+    """Stops the background sniffing thread."""
+    print('Stop sniffing command received')
+    thread_stop_event.set()
+
 
 @socketio.on('disconnect', namespace='/test')
 def test_disconnect():
