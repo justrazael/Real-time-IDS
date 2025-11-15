@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="static/css/media.css">
     
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <script src="static/js/application.js"></script>
@@ -107,6 +108,70 @@
                             </table>
                         </div>
                     </div> </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <span class="glyphicon glyphicon-filter"></span>
+                        Filtered Logs
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="btn-group" role="group" aria-label="Filter by">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Filter by Prediction
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="prediction-filter-values">
+                                <!-- Prediction values will be populated dynamically -->
+                            </ul>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Filter by Risk
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="risk-filter-values">
+                                <!-- Risk values will be populated dynamically -->
+                            </ul>
+                        </div>
+                        <button type="button" class="btn btn-danger" id="clear-filter-btn">Clear Filter</button>
+                    </div>
+                    <div id="filtered-log" style="margin-top: 15px;">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-condensed" id="filtered-details">
+                                <thead>
+                                    <tr>
+                                        <th>Flow ID</th>
+                                        <th>Src IP</th>
+                                        <th>Src Port</th>
+                                        <th>Dst IP</th>
+                                        <th>Dst Port</th>
+                                        <th>Protocol</th>
+                                        <th>Start time</th>
+                                        <th>Last seen</th>
+                                        <th>App name</th>
+                                        <th>PID</th>
+                                        <th>Prediction</th>
+                                        <th>Prob</th>
+                                        <th>Risk</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="13" class="text-center">Select a filter to view logs.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

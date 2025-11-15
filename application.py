@@ -252,11 +252,16 @@ def classify(features):
     proba = predict_fn_rf([features])
     proba_score = [proba[0].max()]
     proba_risk = sum(list(proba[0,1:]))
-    if proba_risk >0.8: risk = ["<p style=\"color:red;\">Very High</p>"]
-    elif proba_risk >0.6: risk = ["<p style=\"color:orangered;\">High</p>"]
-    if proba_risk >0.4: risk = ["<p style=\"color:orange;\">Medium</p>"]
-    if proba_risk >0.2: risk = ["<p style=\"color:green;\">Low</p>"]
-    else: risk = ["<p style=\"color:limegreen;\">Minimal</p>"]
+    if proba_risk > 0.8:
+        risk = ["<p style=\\\"color:red;\\\">Very High</p>"]
+    elif proba_risk > 0.6:
+        risk = ["<p style=\\\"color:orangered;\\\">High</p>"]
+    elif proba_risk > 0.4:
+        risk = ["<p style=\\\"color:orange;\\\">Medium</p>"]
+    elif proba_risk > 0.2:
+        risk = ["<p style=\\\"color:green;\\\">Low</p>"]
+    else:
+        risk = ["<p style=\\\"color:limegreen;\\\">Minimal</p>"]
 
     # x = K.process(features[0])
     # z_scores = round((x-m)/s,2)
@@ -472,6 +477,7 @@ def stop_sniffing():
 @socketio.on('disconnect', namespace='/test')
 def test_disconnect():
     print('Client disconnected')
+
 
 from data_loader import load_ids_logs
 
