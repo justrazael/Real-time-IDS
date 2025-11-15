@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Real-time-IDS">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Scenario A1-ARFF.zip!/" />
+      <root url="jar://$PROJECT_DIR$/Scenario A2-ARFF.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
