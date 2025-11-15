@@ -463,5 +463,83 @@ from data_loader import load_ids_logs
 # Load dataset before starting the server
 df = load_ids_logs("dataset/TimeBasedFeatures-Dataset-15s-VPN.csv")
 
+#data cleaning
+
+def clean_and_filter_data(df, start_date=None, end_date=None,
+                          protocol=None, src_ip=None, dst_ip=None):
+    """
+    Cleans and filters the dataset based on given parameters.
+    Returns a filtered Pandas DataFrame.
+    """
+    data = df.copy()
+
+    # --- Basic cleaning ---
+    data.dropna(inplace=True)
+    if 'FlowDuration' in data.columns:
+        data = data[data['FlowDuration'] > 0]
+    data = data.drop_duplicates()
+
+    # --- Filtering logic ---
+    if start_date and end_date and 'FlowStartTime' in data.columns:
+        data = data[(data['FlowStartTime'] >= start_date) &
+                    (data['FlowStartTime'] <= end_date)]
+
+    if protocol and 'Protocol' in data.columns:
+        data = data[data['Protocol'].astype(str).str.contains(protocol, case=False, na=False)]
+
+    if src_ip and 'Src' in data.columns:
+        data = data[data['Src'].astype(str).str.contains(src_ip, case=False, na=False)]
+
+    if dst_ip and 'Dest' in data.columns:
+        data = data[data['Dest'].astype(str).str.contains(dst_ip, case=False, na=False)]
+
+    return data
+
+
+@app.route('/filter', methods=['GET'])
+def filter_data():
+    """
+    Manual filtering endpoint.
+    Example:
+    /filter?protocol=TCP&src_ip=172.17&dst_ip=34.117
+    """
+    start_date = request.args.get('start_date')
+    end_date   = request.args.get('end_date')
+    protocol   = request.args.get('protocol')
+    src_ip     = request.args.get('src_ip')
+    dst_ip     = request.args.get('dst_ip')
+
+    filtered_df = clean_and_filter_data(df,
+                                        start_date=start_date,
+                                        end_date=end_date,
+                                        protocol=protocol,
+                                        src_ip=src_ip,
+                                        dst_ip=dst_ip)
+
+    return jsonify(filtered_df.head(50).to_dict(orient='records'))
+
+
+
+import datetime as dt
+
+def auto_filter_loop():
+    """Runs automatic filtering periodically."""
+    while True:
+        now = dt.datetime.now()
+        window_start = (now - dt.timedelta(minutes=10)).strftime('%Y-%m-%d %H:%M:%S')
+        window_end = now.strftime('%Y-%m-%d %H:%M:%S')
+
+        auto_filtered = clean_and_filter_data(df,
+                                              start_date=window_start,
+                                              end_date=window_end,
+                                              protocol='TCP')
+
+        socketio.emit('auto_filtered_update',
+                      {'records': auto_filtered.tail(10).to_dict(orient='records')},
+                      namespace='/test')
+        socketio.sleep(15)
+
+
 if __name__ == '__main__':
+    socketio.start_background_task(auto_filter_loop)
     socketio.run(app)
