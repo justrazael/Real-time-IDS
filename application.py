@@ -177,7 +177,7 @@ FlowTimeout = 600
 
 #load models
 # with open('models/scaler.pkl', 'rb') as f:
-#     normalisation = pickle.load(f)
+#normalisation = pickle.load(f)
 
 ae_scaler = joblib.load("models/preprocess_pipeline_AE_39ft.save")
 ae_model = keras.models.load_model('models/autoencoder_39ft.hdf5')

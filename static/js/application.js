@@ -21,6 +21,7 @@ $(document).ready(function(){
     var socket = io.connect('http://' + document.domain + ':' + location.port + '/test');
     var messages_received = [];
     var all_messages = []; // Store all messages for client-side filtering
+    var filtered_logs = []; // Store filtered logs for export
     var ctx = document.getElementById("myChart");
     var myChart = new Chart(ctx, {
         type: 'bar',
@@ -46,9 +47,10 @@ $(document).ready(function(){
             }]
         },
         options: {
-                legend: {
-                  display: false
-                },
+            legend: {
+                display: true,
+                position: 'top'
+            },
             scales: {
     
                 yAxes: [{
@@ -87,11 +89,135 @@ $(document).ready(function(){
             responsive: true,
             legend: {
                 position: 'top',
+                display: true
             },
             animation: {
                 animateScale: true,
                 animateRotate: true
             }
+        }
+    });
+
+    // Event listener for exporting pie chart
+    $('#export-pie-chart').on('click', function() {
+        var a = document.createElement('a');
+        a.href = pieChart.toBase64Image();
+        a.download = 'prediction-types.png';
+        a.click();
+    });
+
+    $('#export-bar-chart').on('click', function() {
+        var a = document.createElement('a');
+        a.href = myChart.toBase64Image();
+        a.download = 'source-ip-activity.png';
+        a.click();
+    });
+
+    // Event listener for exporting live log
+    $('#export-live-log').on('click', function() {
+        if (messages_received.length === 0) {
+            alert("No live flow data to export.");
+            return;
+        }
+
+        const headers = ['Flow ID', 'Src IP', 'Src Port', 'Dst IP', 'Dst Port', 'Protocol', 'Start time', 'Flow last seen', 'App name', 'PID', 'Prediction', 'Prob', 'Risk'];
+        
+        let csvRows = [];
+        csvRows.push(headers.join(',')); // Add header row
+
+        messages_received.forEach(function(row) {
+            let newRow = [...row]; // Create a copy to modify
+
+            // Clean up IP columns (remove HTML)
+            newRow[1] = String(newRow[1]).replace(/<.*?>/g, ''); // Src IP
+            newRow[3] = String(newRow[3]).replace(/<.*?>/g, ''); // Dst IP
+
+            // Format timestamps
+            newRow[6] = formatTimestamp(newRow[6]); // Start time
+            newRow[7] = formatTimestamp(newRow[7]); // Flow last seen
+
+            // Clean up Risk column (extract text from HTML)
+            newRow[12] = $(newRow[12]).text();
+
+            // Handle potential commas in data by quoting
+            const processedRow = newRow.map(cell => {
+                let cellData = String(cell).replace(/"/g, '""'); // Escape double quotes
+                if (cellData.includes(',')) {
+                    return `"${cellData}"`;
+                }
+                return cellData;
+            });
+            
+            csvRows.push(processedRow.join(','));
+        });
+
+        const csvString = csvRows.join('\r\n');
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+        
+        var link = document.createElement("a");
+        if (link.download !== undefined) { // feature detection
+            // Browsers that support HTML5 download attribute
+            var url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "live_flow_capture.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    });
+
+    // Event listener for exporting filtered log
+    $('#export-filtered-log').on('click', function() {
+        if (filtered_logs.length === 0) {
+            alert("No filtered data to export. Please apply a filter first.");
+            return;
+        }
+
+        const headers = ['Flow ID', 'Src IP', 'Src Port', 'Dst IP', 'Dst Port', 'Protocol', 'Start time', 'Flow last seen', 'App name', 'PID', 'Prediction', 'Prob', 'Risk'];
+        
+        let csvRows = [];
+        csvRows.push(headers.join(',')); // Add header row
+
+        filtered_logs.forEach(function(row) {
+            let newRow = [...row]; // Create a copy to modify
+
+            // Clean up IP columns (remove HTML)
+            newRow[1] = String(newRow[1]).replace(/<.*?>/g, ''); // Src IP
+            newRow[3] = String(newRow[3]).replace(/<.*?>/g, ''); // Dst IP
+
+            // Format timestamps
+            newRow[6] = formatTimestamp(newRow[6]); // Start time
+            newRow[7] = formatTimestamp(newRow[7]); // Flow last seen
+
+            // Clean up Risk column (extract text from HTML)
+            newRow[12] = $(newRow[12]).text();
+
+            // Handle potential commas in data by quoting
+            const processedRow = newRow.map(cell => {
+                let cellData = String(cell).replace(/"/g, '""'); // Escape double quotes
+                if (cellData.includes(',')) {
+                    return `"${cellData}"`;
+                }
+                return cellData;
+            });
+            
+            csvRows.push(processedRow.join(','));
+        });
+
+        const csvString = csvRows.join('\r\n');
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+        
+        var link = document.createElement("a");
+        if (link.download !== undefined) { // feature detection
+            // Browsers that support HTML5 download attribute
+            var url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "filtered_flow_capture.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     });
 
@@ -182,7 +308,7 @@ $(document).ready(function(){
         var filterValue = $(this).data('filter-value');
         console.log('Client-side filtering by ' + filterBy + ' = ' + filterValue);
 
-        var filtered_logs = all_messages.filter(function(log) {
+        filtered_logs = all_messages.filter(function(log) {
             if (filterBy === 'prediction') {
                 return log[10] === filterValue;
             } else if (filterBy === 'risk') {
@@ -219,6 +345,7 @@ $(document).ready(function(){
     $('#clear-filter-btn').on('click', function() {
         console.log('Clearing filter');
         $('#filtered-details tbody').html('<tr><td colspan="13" class="text-center">Select a filter to view logs.</td></tr>');
+        filtered_logs = []; // Clear the stored filtered logs
     });
 
     $('#start-button').on('click', function() {
