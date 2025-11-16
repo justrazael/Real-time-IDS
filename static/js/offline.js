@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     populateSeverityFilter(fullData);
                     renderTable(fullData);
                     generateChart(fullData);
+                    generatePieChart(fullData);
                 }
             });
         } else {
@@ -127,6 +128,54 @@ document.addEventListener('DOMContentLoaded', function () {
                         beginAtZero: true
                     }
                 }
+            }
+        });
+    }
+    function generatePieChart(data) {
+        const labelCounts = {};
+        data.forEach(row => {
+            const label = row['Label'];
+            if (label) {
+                labelCounts[label] = (labelCounts[label] || 0) + 1;
+            }
+        });
+
+        const chartLabels = Object.keys(labelCounts);
+        const chartData = Object.values(labelCounts);
+
+        const ctx = document.getElementById('pieChartOffline').getContext('2d');
+        if (window.myPieChartOffline instanceof Chart) {
+            window.myPieChartOffline.destroy();
+        }
+        window.myPieChartOffline = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    label: 'Prediction Types',
+                    data: chartData,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
             }
         });
     }
