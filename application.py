@@ -255,9 +255,9 @@ def classify(features):
     if proba_risk > 0.8:
         risk = ["<p style=\\\"color:red;\\\">Very High</p>"]
     elif proba_risk > 0.6:
-        risk = ["<p style=\\\"color:orangered;\\\">High</p>"]
+        risk = ["<p style=\\\"color:orange;\\\">High</p>"]
     elif proba_risk > 0.4:
-        risk = ["<p style=\\\"color:orange;\\\">Medium</p>"]
+        risk = ["<p style=\\\"color:yellow;\\\">Medium</p>"]
     elif proba_risk > 0.2:
         risk = ["<p style=\\\"color:green;\\\">Low</p>"]
     else:
@@ -407,8 +407,8 @@ def flow_detail():
     proba_score = list(predict_fn_rf(choosen_instance))
     risk_proba =  sum(proba_score[0][1:])
     if risk_proba >0.8: risk = "Risk: <p style=\"color:red;\">Very High</p>"
-    elif risk_proba >0.6: risk = "Risk: <p style=\"color:orangered;\">High</p>"
-    elif risk_proba >0.4: risk = "Risk: <p style=\"color:orange;\">Medium</p>"
+    elif risk_proba >0.6: risk = "Risk: <p style=\"color:orange;\">High</p>"
+    elif risk_proba >0.4: risk = "Risk: <p style=\"color:yellow;\">Medium</p>"
     elif risk_proba >0.2: risk = "Risk: <p style=\"color:green;\">Low</p>"
     else: risk = "Risk: <p style=\"color:limegreen;\">Minimal</p>"
     exp = explainer.explain_instance(choosen_instance[0], predict_fn_rf, num_features=6, top_labels = 1)
